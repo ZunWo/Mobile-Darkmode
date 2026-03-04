@@ -150,3 +150,37 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleHeader.classList.toggle('active');
     });
 });
+
+const translations = {
+  th: {
+    'nav-home':'หน้าหลัก','nav-about':'เกี่ยวกับเรา','nav-academic':'วิชาการ',
+    'nav-admission':'การรับสมัคร','nav-faculty':'คณาจารย์','nav-contact':'ติดต่อ',
+    'footer-contact':'ติดต่อเรา','footer-address':'ที่อยู่'
+  },
+  en: {
+    'nav-home':'Home','nav-about':'About','nav-academic':'Academic',
+    'nav-admission':'Admission','nav-faculty':'Faculty','nav-contact':'Contact',
+    'footer-contact':'Contact','footer-address':'Address'
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'th';
+document.addEventListener('DOMContentLoaded', () => applyLang(currentLang, false));
+
+function selectLang(lang) {
+  if (lang === currentLang) return;
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  applyLang(lang, true);
+}
+
+function applyLang(lang, animate) {
+  document.getElementById('btn-th').className = 'bubble ' + (lang==='th' ? 'on' : 'off');
+  document.getElementById('btn-en').className = 'bubble ' + (lang==='en' ? 'on' : 'off');
+  Object.entries(translations[lang]).forEach(([id, text]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (animate) { el.style.opacity='0'; setTimeout(()=>{ el.textContent=text; el.style.opacity='1'; },150); }
+    else el.textContent = text;
+  });
+}

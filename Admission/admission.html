@@ -12,6 +12,12 @@
 </head>
 
 <body>
+    <div id="google_translate_element" style="display:none"></div>
+
+    <div class="lang-toggle-container">
+        <button class="lang-btn active notranslate" onclick="switchLang('th', this)">TH</button>
+        <button class="lang-btn notranslate" onclick="switchLang('en', this)">EN</button>
+    </div>
     <div class="mode-toggle-container">
         <label class="switch">
             <input type="checkbox" id="mode-toggle">
@@ -398,5 +404,37 @@
 
 <script src="../Admission/admission.js"></script>
 <script src="../asset/darkmode.js"></script>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'th',
+        includedLanguages: 'th,en',
+    }, 'google_translate_element');
+
+    setTimeout(() => {
+        const banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) banner.style.display = 'none';
+        document.body.style.top = '0';
+        document.body.style.position = 'static';
+    }, 1000);
+}
+
+function switchLang(lang, btnEl) {
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+        select.value = lang;
+        select.dispatchEvent(new Event('change'));
+    }
+
+    document.querySelectorAll('text[data-th], tspan[data-th]').forEach(el => {
+        const translation = el.getAttribute('data-' + lang);
+        if (translation) el.textContent = translation;
+    });
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
